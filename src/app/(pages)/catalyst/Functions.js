@@ -476,7 +476,10 @@ export const AllDataByGroup = async ()=>{
 }
 
 export function exportToExcel(data,filenamea = "details") { 
-  const filename = filenamea + ".xlsx"
+  const fileNameA = []
+  data[0].Organization.split(" ")?.map((e,i)=>{ if (e[0] !="-"){ fileNameA.push(e[0])} })
+    const fileName = fileNameA.slice(-length,-1).slice(0,3).join("")
+  const filename = filenamea + "_"+fileName + ".xlsx"
   // Create a new workbook and add the data
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
@@ -509,7 +512,7 @@ function s2ab(s) {
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export const PrintPdf = async (AllDataGroups=[],name="Groupes") => {
   // const AllDataGroups = (await AllDataByGroup())
-  const DataGroups = AllDataGroups?.env
+  const DataGroups = AllDataGroups.env
   const fileNameA = []
  DataGroups[0].Organization.split(" ")?.map((e,i)=>{ if (e[0] !="-"){ fileNameA.push(e[0])} })
   console.log("DataPDF" ,AllDataGroups);
@@ -531,7 +534,7 @@ export const PrintPdf = async (AllDataGroups=[],name="Groupes") => {
   ]
   const dataRows = DataGroups?.map((itm)=>{
     return [
-      {text:itm.group,fontSize:9,margin: [0,2,0,2]},
+      {text:itm.Group,fontSize:9,margin: [0,2,0,2]},
       {text:itm.Active,fontSize:9,margin: [0,2,0,2]},
       {text:itm.NotActive,fontSize:9,margin: [0,2,0,2]},
       {text:itm.Total,fontSize:9,margin: [0,2,0,2]},
