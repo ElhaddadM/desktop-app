@@ -1,7 +1,7 @@
 "use client";
-import {  Progress } from 'antd';
+import {  Modal, Space } from 'antd';
 import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { AllDataByGroup, AllDataByFiliere,exportToExcel ,PrintPdf} from "../app/(pages)/catalyst/Functions";
+import { AllDataByGroup, AllDataByFiliere,detailGrp,detailGrpFiliere,exportToExcel ,PrintPdf} from "../app/(pages)/catalyst/Functions";
 import {
   flexRender,
   getCoreRowModel,
@@ -28,7 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DoubleRightOutlined ,FileExcelOutlined,FilePdfOutlined} from '@ant-design/icons';
+import { DoubleRightOutlined ,FileExcelOutlined,FilePdfOutlined,DashOutlined} from '@ant-design/icons';
 import CardA from './CardA';
 
 function TableB() {
@@ -42,7 +42,8 @@ function TableB() {
   const [TotalNActive, setTotalNActive] = useState(0);
   const [Organization, setOrganization] = useState("-");
   const [count, setCount] = useState(false);
-  const [file,setFile]  = useState('Details')
+  const [file,setFile]  = useState('Groups')
+  const [details,setDetails]  = useState([])
 
   const fetchData = async (choix = 1) => {
     const dataa = choix == 1 ?  await AllDataByGroup() : await AllDataByFiliere();
@@ -67,9 +68,31 @@ function TableB() {
 
 
   const handleFile = (filea)=>{
-    const obj1 = {env:[...data],TotalAll,TotalActive,TotalNActive}
-    filea =="excel" ? exportToExcel(data,file) : PrintPdf(obj1,file)
-    console.log("Selected" , obj1);
+    const env =[...data]
+        env.push({"Organization": data[0].Organization ,Group :"TOTAL",Active:TotalActive,NotActive :TotalNActive,Total:TotalAll,PourCentageA: ((TotalActive/TotalAll)*100).toFixed(), "PourCentageN":((TotalNActive/TotalAll)*100).toFixed(),date:data[0].date})
+    filea =="excel" ? exportToExcel(env,file) : PrintPdf({env},file)
+    // console.log("Selected" , env);
+  }
+
+
+
+  const handleFileDetail = async(filea)=>{
+    const detail = (await detailGrp(filea))
+    const env =[...detail.env]
+    env.push({"Organization": data[0].Organization ,Group :"TOTAL",Active:detail.TotalActive,NotActive :detail.TotalNActive,Total:detail.TotalAll,PourCentageA: ((detail.TotalActive/detail.TotalAll)*100).toFixed(), "PourCentageN":((detail.TotalNActive/detail.TotalAll)*100).toFixed(),date:data[0].date})
+    const filez = "Datails_" + filea
+    exportToExcel(env,filez) 
+    // console.log("Selected" , detail);
+  }
+
+  const handleFileFiliere = async (gr) =>{
+    const DetailFilier = (await detailGrpFiliere(gr))
+    console.log("ICI",DetailFilier);
+    const env =[...DetailFilier.env]
+    env.push({"Organization": data[0].Organization ,Group :"TOTAL",Active:DetailFilier.TotalActive,NotActive :DetailFilier.TotalNActive,Total:DetailFilier.TotalAll,PourCentageA: ((DetailFilier.TotalActive/DetailFilier.TotalAll)*100).toFixed(), "PourCentageN":((DetailFilier.TotalNActive/DetailFilier.TotalAll)*100).toFixed(),date:data[0].date})
+
+    const name = 'Details_'+gr
+    exportToExcel(env,name)  
   }
 //   const handleFetchData = useCallback(
 //     (choix = 1) => {
@@ -92,129 +115,159 @@ function TableB() {
 //     handleFetchData(1);
 //   }, [handleFetchData]);
 
-  const columns = useMemo(
-    () => [
-      {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
-      {
-        accessorKey: "Group",
-        header: ({ column }) => (
-          <Button
-            className="font-bold"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Group
-            <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 " />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="capitalize font-bold">{row.getValue("Group")}</div>
-        ),
-      },
-      {
-        accessorKey: "Active",
-        header: ({ column }) => (
-          <Button
-            className="font-bold"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Active
-            <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 " />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="lowercase text-green-500 text-md font-bold">{row.getValue("Active")}</div>
-        ),
-      },
-      {
-        accessorKey: "NotActive",
-        header: ({ column }) => (
-          <Button
-            className="font-bold"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            NotActive
-            <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="capitalize text-red-600 text-md font-bold">{row.getValue("NotActive")}</div>
-        ),
-      },
-      {
-        accessorKey: "Total",
-        header: ({ column }) => (
-          <Button
-            className="font-bold"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Total
-            <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="capitalize text-blue-700 text-md font-bold">{row.getValue("Total")}</div>
-        ),
-      },
-      {
-        accessorKey: "PourCentageA",
-        header: ({ column }) => (
-          <Button
-            className="font-bold"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            PourCentageA
-            <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 " />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="capitalize text-green-500 text-md font-bold">{row.getValue("PourCentageA")}</div>
-        ),
-      },
-      {
-        accessorKey: "PourCentageN",
-        header: ({ column }) => (
-          <Button
-            className="font-bold"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            PourCentageN
-            <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <div className="capitalize text-red-600 text-md font-bold">{row.getValue("PourCentageN")}</div>
-        ),
-      },
-    ],
-    []
-  );
+const handleDetailsGroup = async (grp)=>{
+  const detail =  (await detailGrp(grp)).env
+      setDetails(detail)
+      // console.log("Click" , detail);
+      // info(detail)
+      document.getElementById('my_modal_4').showModal()
+}
+
+const columns = useMemo(
+  () => [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "Group",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Group
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 " />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize font-bold">{row.getValue("Group")}</div>
+      ),
+    },
+    {
+      accessorKey: "Active",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Active
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 " />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="lowercase text-green-500 text-md font-bold">{row.getValue("Active")}</div>
+      ),
+    },
+    {
+      accessorKey: "NotActive",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          NotActive
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize text-red-600 text-md font-bold">{row.getValue("NotActive")}</div>
+      ),
+    },
+    {
+      accessorKey: "Total",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Total
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize text-blue-700 text-md font-bold">{row.getValue("Total")}</div>
+      ),
+    },
+    {
+      accessorKey: "PourCentageA",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          PourCentageA
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 " />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize text-green-500 text-md font-bold">{row.getValue("PourCentageA")}</div>
+      ),
+    },
+    {
+      accessorKey: "PourCentageN",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          PourCentageN
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize text-red-600 text-md font-bold">{row.getValue("PourCentageN")}</div>
+      ),
+    },
+    {
+      accessorKey: "  ",
+      header: ({ column }) => (
+        <Button
+          className="font-bold"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          
+          <ArrowUpDown className="ml-2 h-4 w-4 text-blue-500 hidden" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className={`${file == "Groups" ? "dropdown dropdown-hover Groups" : "hidden"}`} >
+          <div tabIndex={0} role="button" className="m-1"><DashOutlined /></div>
+          <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-20 p-2 shadow">
+            <li className='cursor-pointer my-4 font-bold text-md w-7' onClick={() => { handleDetailsGroup(row.getValue("Group")) }} title={"Details " + row.getValue("Group")}>Details</li>
+            <li className='cursor-pointer font-bold text-xl w-7' onClick={() => { handleFileDetail(row.getValue("Group")) }} title='Export XLSX'><FileExcelOutlined className='text-green-600 cursor-pointer' /></li>
+          </ul>
+        </div>
+      ),
+    },
+  ],
+  []
+);
 
   const table = useReactTable({
     data,
@@ -254,15 +307,68 @@ function TableB() {
 
   return (
     <div className="w-full">
-      {/* <Progress
-      percent={50}
-      className={`${count ? 'hidden' : ''}`}
-      percentPosition={{
-        align: 'center',
-        type: 'outer',
-      }}
 
-    /> */}
+<dialog id="my_modal_4" className="modal">
+  <div className="modal-box w-11/12 max-w-5xl">
+    <h3 className="font-bold text-lg text-blue-500">Detail {details[0]?.Group}!</h3>
+  
+    <div className="overflow-x-auto h-96 overflow-y-scroll font-bold text-xl " >
+              <table className="table table-xs w-full">
+                <thead>
+                  <tr>
+                    <td>N°</td>
+                    <td>Group</td>
+                    <td>Active</td>
+                    <td>Not Active</td>
+                    <td>Total</td>
+                    <td>PourCentageA</td>
+                    <td>PourCentageN</td>
+                    <td></td>
+                    
+                  </tr>
+                </thead>
+                <tbody className=''>
+                  {
+                    details?.map((e,i)=>{
+                      return (
+                        <tr key={i}>
+                          <th>{i +1} </th>
+                          <td>{e.Group}</td>
+                          <td>{e.Active}</td>
+                          <td>{e.NotActive}</td>
+                          <td>{e.Total}</td>
+                          <td>{e.PourCentageA}</td>
+                          <td>{e.PourCentageN}</td>
+                          <td><FileExcelOutlined className='text-green-600 font-bold text-2xl cursor-pointer' onClick={()=>{handleFileFiliere(e.Group)}}/> </td>
+                      </tr>
+                      )
+                    })
+                  }
+                 
+                  </tbody>
+                    <tfoot>
+                        <tr>
+                          <th>N°</th>
+                          <th>Group</th>
+                          <th>Active</th>
+                          <th>Not Active</th>
+                          <th>Total</th>
+                          <th>PourCentageA</th>
+                          <th>PourCentageN</th>
+                      </tr>
+                    </tfoot>
+                  </table>
+            </div>
+   
+    <div className="modal-action">
+      <form method="dialog">
+        {/* if there is a button, it will close the modal */}
+        <button className="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
 
         <div className='	w-full flex gap-2 flex-wrap'>
           <CardA title={Organization} num={"Organization"} />
@@ -292,7 +398,7 @@ function TableB() {
           className="max-w-sm"
         />
         
-                <div className="form-controle mx-8 font-bold flex w-40 " >
+                <div className="form-controle mx-8 font-bold flex w-40  " >
                     <label className="label cursor-pointer " >
                         <span className="label-text badge badge-accent">Groups</span>
                         <input type="radio" ref={radioRef1} name="group" value="1" onClick={handleCheck}  className="radio checked:bg-red-500 mx-2" defaultChecked  />

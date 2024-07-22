@@ -99,7 +99,7 @@ const groupFact = [...new Set(groupsFacA)];
           // console.log("Faculte" , UserErr);
          //  setInfo(UserErr)
        
-          const rest = { "group" :f.toUpperCase(),"Active" : AllUsersActive ,"NotActive" : UserNoActive , "Total":AllUsers ,"PourCentageA" : ((AllUsersActive / AllUsers ) * 100).toFixed() ,"PourCentageN" : ((UserNoActive / AllUsers ) * 100).toFixed() }
+          const rest = { "Group" :f.toUpperCase(),"Active" : AllUsersActive ,"NotActive" : UserNoActive , "Total":AllUsers ,"PourCentageA" : ((AllUsersActive / AllUsers ) * 100).toFixed() ,"PourCentageN" : ((UserNoActive / AllUsers ) * 100).toFixed() }
            env.push(rest)
 
         })
@@ -150,12 +150,24 @@ export  const detailGrp = async (grp='') =>{
     // console.log("Via Group ", UserErr);
    //  setInfo(UserErr)
  
-    const rest = { "group" :f.toUpperCase(),"Active" : AllUsersActive ,"NotActive" : UserNoActive , "Total":AllUsers ,"PourCentageA" : ((AllUsersActive / AllUsers ) * 100).toFixed() ,"PourCentageN" : ((UserNoActive / AllUsers ) * 100).toFixed() }
+    const rest = { "Organization":data[0]?.Organization  ,"Group" :f.toUpperCase(),"Active" : AllUsersActive ,"NotActive" : UserNoActive , "Total":AllUsers ,"PourCentageA" : ((AllUsersActive / AllUsers ) * 100).toFixed() ,"PourCentageN" : ((UserNoActive / AllUsers ) * 100).toFixed() }
      env.push(rest)
      
   })
+
+  let TotalAll = 0;
+  let TotalActive = 0;
+  let TotalNActive = 0;
+  env?.map((el) =>
+    {
+      TotalAll += el.Total;
+      TotalActive += el.Active;
+      TotalNActive += el.NotActive;
+      });
+  const details = { env , TotalAll,TotalActive,TotalNActive}
+
   // setDetails(env)
-  return { "details" : env}
+  return details
  
 
 }
@@ -189,13 +201,27 @@ export  const detailGrpFiliere = async (grp='') =>{
     // const UsersErrB = UsersErrA?.filter((item) =>{ return item !=undefined})
     // const infoUsers = UsersErrB?.map((el)=>{ return  data.find(u => u.Email== el )})
     // const UserErr =[...new Set(infoUsers)]
-    console.log("Via Group ", groupData);
+    // console.log("Via Group ", groupData);
    //  setInfo(UserErr)
  
-    const rest = { "group" :f.toUpperCase(),"Active" : AllUsersActive ,"NotActive" : UserNoActive , "Total":AllUsers ,"PourCentageA" : ((AllUsersActive / AllUsers ) * 100).toFixed() ,"PourCentageN" : ((UserNoActive / AllUsers ) * 100).toFixed() }
+    const rest = { "Group" :f.toUpperCase(),"Active" : AllUsersActive ,"NotActive" : UserNoActive , "Total":AllUsers ,"PourCentageA" : ((AllUsersActive / AllUsers ) * 100).toFixed() ,"PourCentageN" : ((UserNoActive / AllUsers ) * 100).toFixed() }
      env.push(rest)
      
   })
+  
+
+ 
+  let TotalAll = 0;
+  let TotalActive = 0;
+  let TotalNActive = 0;
+  env?.map((el) =>
+    {
+      TotalAll += el.Total;
+      TotalActive += el.Active;
+      TotalNActive += el.NotActive;
+      });
+  const Resultats = { env , TotalAll,TotalActive,TotalNActive}
+return Resultats
   // setDetails(env)
   return { "detailsFiliere" : env}
   // return { "detailsFiliere" : groupsAA,"details": detailA}
@@ -289,7 +315,17 @@ const rest = {
   date : dataa[0].date
 };
 env.push(rest);
-return env
+  let TotalAll = 0;
+  let TotalActive = 0;
+  let TotalNActive = 0;
+  env?.map((el) =>
+    {
+      TotalAll += el.Total;
+      TotalActive += el.Active;
+      TotalNActive += el.NotActive;
+      });
+  const Resultats = { env , TotalAll,TotalActive,TotalNActive}
+return Resultats
 
     
 }
@@ -476,8 +512,9 @@ export const AllDataByGroup = async ()=>{
 }
 
 export function exportToExcel(data,filenamea = "details") { 
+  console.log("Excel",data);
   const fileNameA = []
-  data[0].Organization.split(" ")?.map((e,i)=>{ if (e[0] !="-"){ fileNameA.push(e[0])} })
+   if (data[0]?.Organization) data[0].Organization?.split(" ")?.map((e,i)=>{ if (e[0] !="-"){ fileNameA.push(e[0])} })
     const fileName = fileNameA.slice(-length,-1).slice(0,3).join("")
   const filename = filenamea + "_"+fileName + ".xlsx"
   // Create a new workbook and add the data
@@ -523,15 +560,15 @@ export const PrintPdf = async (AllDataGroups=[],name="Groupes") => {
   const DataNA = AllDataGroups?.TotalNActive
   const PourCentageA = ((DataActive / DataTotal)*100).toFixed()
   const PourCentageNA = ((DataNA / DataTotal)*100).toFixed()
-  const obj = [
-    {text:"TOTAL",fontSize:9,margin: [0,2,0,2],background:"green"},
-    {text:DataActive,fontSize:9,margin: [0,2,0,2],},
-    {text:DataNA,fontSize:9,margin: [0,2,0,2],},
-    {text:DataTotal,fontSize:9,margin: [0,2,0,2],},
-    {text:PourCentageA,fontSize:9,margin: [0,2,0,2],},
-    {text:PourCentageNA,fontSize:9,margin: [0,2,0,2],},
+  // const obj = [
+  //   {text:"TOTAL",fontSize:9,margin: [0,2,0,2],background:"green"},
+  //   {text:DataActive,fontSize:9,margin: [0,2,0,2],},
+  //   {text:DataNA,fontSize:9,margin: [0,2,0,2],},
+  //   {text:DataTotal,fontSize:9,margin: [0,2,0,2],},
+  //   {text:PourCentageA,fontSize:9,margin: [0,2,0,2],},
+  //   {text:PourCentageNA,fontSize:9,margin: [0,2,0,2],},
     
-  ]
+  // ]
   const dataRows = DataGroups?.map((itm)=>{
     return [
       {text:itm.Group,fontSize:9,margin: [0,2,0,2]},
@@ -543,7 +580,7 @@ export const PrintPdf = async (AllDataGroups=[],name="Groupes") => {
       
     ]
   })
-  dataRows.push(obj)
+  // dataRows.push(obj)
   // Define the title section
   const rapportTitle = 
   [   
