@@ -1,9 +1,9 @@
 import Template from '@/app/Template'
-import React from 'react'
+import Stats from "./Stats"
 
 function page() {
   return (
-    <Template Contents ={"Catalyst Stat Page" } />
+    <Template Contents ={ <Stats />} />
   )
 }
 
