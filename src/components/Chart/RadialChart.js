@@ -43,7 +43,7 @@ export function RadialChart() {
         setActive(dataGroups.TotalActive)
         setNotActive(dataGroups.TotalNActive)
         setDate(dataGroups.env[0].date)
-      console.log("ChartDaara" , dataGroups);
+      // console.log("ChartDaara" , dataGroups);
   }
 
   GetData()

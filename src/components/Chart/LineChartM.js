@@ -17,7 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = []
+import { useState } from "react"
+// const chartData = []
 
 const chartConfig = {
   desktop: {
@@ -30,21 +31,14 @@ const chartConfig = {
   },
 } 
 
-export function LineChartM() {
-
-  const getData = async ()=>{
-    const dataGroups = await AllDataByGroup()
-      dataGroups.env?.map((el)=>{  
-        chartData.push(  { month: el.Group, Active: el.Active, NoActive: el.NotActive } )
-      })
-      console.log("YEAR" , chartData);
-  }
-  getData()
+export function LineChartM({chartData,date}) {
+    // const [date,setDate] =useState('-')
+  
   return (
     <Card>
       <CardHeader>
         <CardTitle>Line Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription> {date} </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -68,14 +62,14 @@ export function LineChartM() {
             <Line
               dataKey="Active"
               type="monotone"
-              stroke="var(--color-desktop)"
+              stroke="var(--color-mobile)"
               strokeWidth={2}
               dot={false}
             />
             <Line
               dataKey="NoActive"
               type="monotone"
-              stroke="var(--color-mobile)"
+               stroke="var(--color-desktop)"
               strokeWidth={2}
               dot={false}
             />
