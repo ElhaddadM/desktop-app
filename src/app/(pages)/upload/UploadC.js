@@ -43,9 +43,9 @@ doc.save('table.pdf')
   return (
     <div>
       <UploadFile/>
-      <button onClick={async ()=> {await fun() }} > Click </button>
+      {/* <button onClick={async ()=> {await fun() }} > Click </button> */}
       <div>
-        <StatisticsCard/>
+        {/* <StatisticsCard/> */}
       {/* <table style={{ width: 500 }} id='tabA' ref={tabRef}>
                 <thead>
                     <tr>

@@ -74,7 +74,7 @@ const props = {
 };
 
 const UploadFile = () => (
-  <div>
+  <div className='h-72'>
     <Dragger {...props}>
     <p className="ant-upload-drag-icon">
       <InboxOutlined />
@@ -85,7 +85,7 @@ const UploadFile = () => (
     </p>
   </Dragger>
 
-  <StatisticsCard />
+  {/* <StatisticsCard /> */}
   </div>
 
 );
