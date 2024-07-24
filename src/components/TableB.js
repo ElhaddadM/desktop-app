@@ -370,11 +370,11 @@ const columns = useMemo(
 </dialog>
 
 
-        <div className='w-full flex gap-6 flex-wrap justify-center'>
-          <div className='w-96'><CardA title={Organization} num={"Organization"} /></div>
-          <div className='w-96'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
-          <div className='w-96'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
-          <div className='w-96'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
+        <div className=' flex gap-6 flex-wrap '>
+          <div className='flex-grow-1 basis-96'><CardA title={Organization} num={"Organization"} /></div>
+          <div className='flex-grow-1 basis-96'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
+          <div className='flex-grow-1 basis-96'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
+          <div className='flex-grow-1 basis-96'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
           
         </div>
 

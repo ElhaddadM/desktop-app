@@ -6,7 +6,7 @@ import { StatisticsCard } from './StatisticsCard';
 import axios from 'axios'
 const { Dragger } = Upload;
 
-const files = ["CatalystUsageReport"]
+const files = ["CatalystUsageReport","PlacementTestReport","LearnerGrowthReport"]
 
 const AddData =  (file, table, data1) => {
   const data = []
@@ -36,6 +36,41 @@ const AddData =  (file, table, data1) => {
   }
 }
 
+const AddDataPlacement =   (file, table, data1) => {
+  console.log("infoPlacement" , file , table , data1);
+  const data = []
+  const date = file.split(".")[1]
+  data1?.slice(1, (data1.length - 4)).map((element) => { 
+    if (element[10] !="" & element[15] !=""){
+          const obj =  { 
+          "Organization": element[0], 
+          "LastName": element[1], 
+          "FirstName": element[2], 
+          "Email": element[3], 
+          "Group": element[4], 
+          "Langue" : element[5],
+          "Test1": element[10], 
+          "Level1": element[15],
+          "date": date 
+        }
+        data.push(obj)
+    }
+    
+  })
+  
+ const StoreData = async ()=>{
+  try {
+    const resultObject = JSON.stringify({"id": "f385", data})
+    await axios.post(`http://localhost:3001/${table}`, resultObject)
+    message.success(`${file} file uploaded successfully.`);
+    console.log("Drop",table);
+  } catch (error) {
+    console.error(error)
+  }
+ }
+  axios.delete("http://localhost:3001/PlacementTestReport/f385").then(()=>{  StoreData() }).catch(()=>{ StoreData() })
+}
+
 const props = {
   name: 'file',
   multiple: false,
@@ -50,6 +85,8 @@ const props = {
           console.log("Dderop" , results.data);
           const fileName = info.file.name.split(".")
           if (fileName.includes(files[0]))   AddData(info.file.name, files[0], results.data) ;
+          if (fileName.includes(files[1]))   AddDataPlacement(info.file.name, files[1], results.data) ; ;
+          if (fileName.includes(files[2]))   console.log('FileGrow' , results.data); ;
           // AddData(info.file.name, files[0], results.data)
         }
       });

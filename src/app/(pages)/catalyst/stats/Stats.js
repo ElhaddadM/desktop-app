@@ -39,11 +39,11 @@ function Stats() {
 
   return (
     <div>
-          <div className='w-full flex gap-6 flex-wrap justify-center'>
-          <div className='w-96'><CardA title={Organization} num={"Organization"} /></div>
-          <div className='w-96'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
-          <div className='w-96'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
-          <div className='w-96'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
+          <div className='flex gap-6 flex-wrap mx-auto'>
+          <div className='flex-grow-1 basis-96 w-auto'><CardA title={Organization} num={"Organization"} /></div>
+          <div className='flex-grow-1 basis-96 w-auto'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
+          <div className='flex-grow-1 basis-96 w-auto'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
+          <div className='flex-grow-1 basis-96 w-auto'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
           
         </div>
         <div className='grid grid-cols-2 gap-4 my-3'>
