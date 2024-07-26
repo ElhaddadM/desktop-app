@@ -76,15 +76,16 @@ const AddDataGrow =   (file, table, data1) => {
   const data = []
   const date = file.split(".")[1]
   data1?.slice(1, (data1.length - 4)).map((element) => { 
-    if (element[10] !="" & element[15] !=""){
+    if (element[10] !="" & element[15] !="" & element[34] != ""){
           const obj =  { 
+          "Total" : "",
           "Organization": element[0], 
           "LastName": element[1], 
           "FirstName": element[2], 
           "Email": element[3], 
           "Group": element[4], 
           "Langue" : element[5],
-          "type" : element[14],
+          "Note" : element[34],
           "Time" : element[12],
           "Test1": element[16],
           "Level1" : element[17],
@@ -98,8 +99,38 @@ const AddDataGrow =   (file, table, data1) => {
     }
     
   })
-  exportToExcel(data,table)
-  console.log("GrowD1" ,data1);
+  const ListEngish = data.map((lng)=>{
+      if( lng.Langue.split (" ")[0].toLowerCase() == "english" ){ return lng }   
+  }  ).filter((item) => {
+    return item != undefined;
+  });
+  ListEngish.sort((a,b)=>{  
+    if (a.Email < b.Email){ return  -1  } 
+    if (a.Email < b.Email){ return  1  } 
+    return 0
+       }) 
+       const copyItems = [];
+       for (let i = 0; i < ListEngish.length - 1; i++) {
+         if (ListEngish[i].Email.toLowerCase() == ListEngish[i + 1].Email.toLowerCase()) {
+            const tme1 = ListEngish[i].Time.split(':')
+            const tme2 = ListEngish[i+1].Time.split(':')
+           ListEngish[i].Total = tme1[0]   + ListEngish[i + 1].Time;
+           copyItems.push(ListEngish[i]);
+           i++; // Skip the next item since it's merged
+         } else {
+           copyItems.push(ListEngish[i]);
+         }
+       }
+       // Handle the last element if not merged
+       if (ListEngish.length > 0 && ListEngish[ListEngish.length - 1].Email.toLowerCase() != ListEngish[ListEngish.length - 2]?.Email.toLowerCase()) {
+         copyItems.push(ListEngish[ListEngish.length - 1]);
+       }
+       
+       console.log("Hnq",copyItems);
+       console.log("HnaTani",ListEngish);
+
+  // exportToExcel(data,table)
+  // console.log("ListEngish1" ,copyItems  );
   console.log("GrowD" ,data);
  const StoreData = async ()=>{
   try {
@@ -111,7 +142,7 @@ const AddDataGrow =   (file, table, data1) => {
     console.error(error)
   }
  }
- axios.delete("http://localhost:3001/LearnerGrowthReport/f385").then(()=>{  StoreData() }).catch(()=>{ StoreData() })
+// axios.delete("http://localhost:3001/LearnerGrowthReport/f385").then(()=>{  StoreData() }).catch(()=>{ StoreData() })
 }
 const props = {
   name: 'file',
