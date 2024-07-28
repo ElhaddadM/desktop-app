@@ -78,15 +78,15 @@ const AddDataGrow =   (file, table, data1) => {
   data1?.slice(1, (data1.length - 4)).map((element) => { 
     if ( element[34] != ""){
           const obj =  { 
-          "TotalTime" : "",
-          "Organization": element[0], 
-          "LastName": element[1], 
-          "FirstName": element[2], 
-          "Email": element[3], 
-          "Group": element[4], 
-          "Langue" : element[5],
-          "Note" : element[34],
-          "Time" : element[12],
+            "Organization": element[0], 
+            "LastName": element[1], 
+            "FirstName": element[2], 
+            "Email": element[3], 
+            "Group": element[4], 
+            "Langue" : element[5],
+            "TotalTime" : "",
+            "Note" : element[34],
+            "Time" : element[12],
           "Test1": element[16],
           "Level1" : element[17],
           "Test2": element[21], 
@@ -174,8 +174,11 @@ const AddDataGrow =   (file, table, data1) => {
   }
 
 const AllDataFilter = [... FilterFun(data,"english"),... FilterFun(data,"Spanish"),... FilterFun(data,"french")]
-      AllDataFilter.map((record)=>{ record.TotalTime =="" ? record.TotalTime = record.Time : record.TotalTime })
-// exportToExcel( [... FilterFun(data,"english"),... FilterFun(data,"Spanish"),... FilterFun(data,"french")],"AllList")
+      AllDataFilter.map((record)=>{ 
+        record.TotalTime =="" ? record.TotalTime = record.Time : record.TotalTime;
+        delete record.Time;
+       })
+exportToExcel(AllDataFilter,"AllList")
 // console.log( "English", FilterFun(data,"english"));
 // console.log( "Spanish", FilterFun(data,"Spanish"));
 console.log( "AllDataFilter", AllDataFilter);
