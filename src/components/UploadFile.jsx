@@ -76,9 +76,9 @@ const AddDataGrow =   (file, table, data1) => {
   const data = []
   const date = file.split(".")[1]
   data1?.slice(1, (data1.length - 4)).map((element) => { 
-    if (element[10] !="" & element[15] !="" & element[34] != ""){
+    if ( element[34] != ""){
           const obj =  { 
-          "Total" : "",
+          "TotalTime" : "",
           "Organization": element[0], 
           "LastName": element[1], 
           "FirstName": element[2], 
@@ -99,40 +99,87 @@ const AddDataGrow =   (file, table, data1) => {
     }
     
   })
-  const ListEngish = data.map((lng)=>{
-      if( lng.Langue.split (" ")[0].toLowerCase() == "english" ){ return lng }   
-  }  ).filter((item) => {
-    return item != undefined;
-  });
-  ListEngish.sort((a,b)=>{  
-    if (a.Email < b.Email){ return  -1  } 
-    if (a.Email < b.Email){ return  1  } 
-    return 0
-       }) 
-       const copyItems = [];
-       for (let i = 0; i < ListEngish.length - 1; i++) {
-         if (ListEngish[i].Email.toLowerCase() == ListEngish[i + 1].Email.toLowerCase()) {
-            const tme1 = ListEngish[i].Time.split(':')
-            const tme2 = ListEngish[i+1].Time.split(':')
-           ListEngish[i].Total = tme1[0]   + ListEngish[i + 1].Time;
-           copyItems.push(ListEngish[i]);
-           i++; // Skip the next item since it's merged
-         } else {
-           copyItems.push(ListEngish[i]);
-         }
-       }
-       // Handle the last element if not merged
-       if (ListEngish.length > 0 && ListEngish[ListEngish.length - 1].Email.toLowerCase() != ListEngish[ListEngish.length - 2]?.Email.toLowerCase()) {
-         copyItems.push(ListEngish[ListEngish.length - 1]);
-       }
-       
-       console.log("Hnq",copyItems);
-       console.log("HnaTani",ListEngish);
 
-  // exportToExcel(data,table)
-  // console.log("ListEngish1" ,copyItems  );
-  console.log("GrowD" ,data);
- const StoreData = async ()=>{
+  const FilterFun = (data1,lang) =>{
+    const ListEnglish = data1
+    .map((lng) => {
+      if (lng.Langue.split(" ")[0].toLowerCase() === lang.toLowerCase()) {
+        return lng;
+      }
+    })
+    .filter((item) => item !== undefined);
+  
+    ListEnglish.sort((a, b) => {
+      if (a.Email.toLowerCase() < b.Email.toLowerCase()) return -1;
+      if (a.Email.toLowerCase() > b.Email.toLowerCase()) return 1;
+      return 0;
+    });
+  
+    const copyItems1 = [];
+  for (let i = 0; i < ListEnglish.length - 1; i++) {
+    if (ListEnglish[i].Email.toLowerCase() === ListEnglish[i + 1].Email.toLowerCase()) {
+      const tme1 = ListEnglish[i].Time.split(':').map(Number);
+      const tme2 = ListEnglish[i + 1].Time.split(':').map(Number);
+      
+      const totalHours = tme1[0] + tme2[0];
+      const totalMinutes = tme1[1] + tme2[1];
+      const totalSeconds = tme1[2] + tme2[2];
+      
+      const normalizedMinutes = Math.floor(totalSeconds / 60);
+      const normalizedHours = Math.floor((totalMinutes + normalizedMinutes) / 60);
+  
+      ListEnglish[i].TotalTime = `${totalHours + normalizedHours}:${(totalMinutes + normalizedMinutes) % 60}:${totalSeconds % 60}`;
+      copyItems1.push(ListEnglish[i]);
+      i++; // Skip the next item since it's merged
+    } else {
+      // ListEnglish[i].TotalTime = ListEnglish[i].Times
+      copyItems1.push(ListEnglish[i]);
+    }
+  }
+  // ----Cas 3 occurence---
+  
+  copyItems1.sort((a, b) => {
+    if (a.Email.toLowerCase() < b.Email.toLowerCase()) return -1;
+    if (a.Email.toLowerCase() > b.Email.toLowerCase()) return 1;
+    return 0;
+  });
+  
+   const copyItems11 = []
+  for (let i = 0; i < copyItems1.length - 1; i++) {
+    if (copyItems1[i].Email.toLowerCase() === copyItems1[i + 1].Email.toLowerCase()) {
+      const tme1 = copyItems1[i].Time.split(':').map(Number);
+      const tme2 = copyItems1[i + 1].Time.split(':').map(Number);
+      
+      const totalHours = tme1[0] + tme2[0];
+      const totalMinutes = tme1[1] + tme2[1];
+      const totalSeconds = tme1[2] + tme2[2];
+      
+      const normalizedMinutes = Math.floor(totalSeconds / 60);
+      const normalizedHours = Math.floor((totalMinutes + normalizedMinutes) / 60);
+  
+      copyItems1[i].TotalTime = `${totalHours + normalizedHours}:${(totalMinutes + normalizedMinutes) % 60}:${totalSeconds % 60}`;
+      copyItems11.push(copyItems1[i]);
+      i++; // Skip the next item since it's merged
+    } else {
+      // copyItems1[i].TotalTime = copyItems1[i].Times
+      copyItems11.push(copyItems1[i]);
+    }
+  }
+  if (copyItems1.length > 0 && copyItems1[copyItems1.length - 1].Email.toLowerCase() !== copyItems1[copyItems1.length - 2]?.Email.toLowerCase()) {
+    copyItems11.push(copyItems1[copyItems1.length - 1]);
+  }
+
+    return copyItems11
+
+  }
+
+const AllDataFilter = [... FilterFun(data,"english"),... FilterFun(data,"Spanish"),... FilterFun(data,"french")]
+      AllDataFilter.map((record)=>{ record.TotalTime =="" ? record.TotalTime = record.Time : record.TotalTime })
+// exportToExcel( [... FilterFun(data,"english"),... FilterFun(data,"Spanish"),... FilterFun(data,"french")],"AllList")
+// console.log( "English", FilterFun(data,"english"));
+// console.log( "Spanish", FilterFun(data,"Spanish"));
+console.log( "AllDataFilter", AllDataFilter);
+const StoreData = async ()=>{
   try {
     const resultObject = JSON.stringify({"id": "f385", data})
     await axios.post(`http://localhost:3001/${table}`, resultObject)
