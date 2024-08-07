@@ -401,13 +401,13 @@ const columns = useMemo(
         
                 <div className="form-controle mx-8 font-bold flex w-40  " >
                     <label className="label cursor-pointer " >
-                        <span className="label-text badge badge-accent">Groups</span>
+                        <span className="label-text badge badge-primary">Groups</span>
                         <input type="radio" ref={radioRef1} name="group" value="1" onClick={handleCheck}  className="radio checked:bg-red-500 mx-2" defaultChecked  />
                     </label>
                     
                 
                     <label className="label cursor-pointer">
-                        <span className="label-text badge badge-accent ">Filieres</span>
+                        <span className="label-text badge badge-primary ">Filieres</span>
                         <input type="radio" ref={radioRef2} name="group" value="2"onClick={handleCheck}  className="radio checked:bg-blue-500 mx-2"  />
                     </label>
                 </div>
@@ -418,8 +418,8 @@ const columns = useMemo(
               </div>
 
               <div className='ms-32 flex gap-6'>
-                 <div className="badge bg-green-400  w-28">Date  <DoubleRightOutlined />  :</div>
-                 <div className='bg-green-400 badge' > {data[0]?.date} </div>
+                 <div className="badge badge-primary   w-28">Date  <DoubleRightOutlined />  :</div>
+                 <div className='badge badge-primary ' > {data[0]?.date} </div>
                  
               </div>
 
