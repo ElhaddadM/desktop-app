@@ -96,7 +96,7 @@ const AddDataGrow =   (file, table, data1) => {
               "Test3": element[26] , 
               "Level3": element[27],
               "Note": element[34],
-              "dateTest2": element[18] 
+              "dateTest2": element[14].toLowerCase() != cr.toLowerCase() ? element[13] : element[18] 
           };
           data.push(obj);
       }
@@ -124,6 +124,7 @@ const AddDataGrow =   (file, table, data1) => {
           if ( e.Test2 =="" && e.Level2 ==""){
             e.Test2 = elm.Test2
             e.Level2 = elm.Level2
+            e.dateTest2 = elm.dateTest2
           }
       }
     })
@@ -233,35 +234,37 @@ const AddDataGrow =   (file, table, data1) => {
           itm.Diff =  parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  )
       } 
       if (parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  ) < 0) {
-        itm.CurrTest = itm.Test1.split("/")[0] + "/400"
-        itm.CurrLevel = itm.Level1
+        itm.CurrTest = itm.Test2.split("/")[0] + "/400"
+        itm.CurrLevel = itm.Level2
         itm.Diff =  parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  )
     }
     }
     if(itm.Test2 !="" & itm.Test3 !="" ){
       if (parseInt(itm.Test2.split("/")[0] - itm.Test3.split("/")[0]  ) >= 0){
-            if (parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  ) >= 0) {
-              itm.CurrTest = itm.Test2.split("/")[0] + "/400"
-              itm.CurrLevel = itm.Level2
-              itm.Diff =  parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  )
-          } 
-          if (parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  ) < 0) {
-            itm.CurrTest = itm.Test1.split("/")[0] + "/400"
-            itm.CurrLevel = itm.Level1
+            itm.CurrTest = itm.Test2.split("/")[0] + "/400"
+            itm.CurrLevel = itm.Level2
             itm.Diff =  parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  )
-        } 
+          //   if (parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  ) >= 0) {
+             
+          // } 
+        //   if (parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  ) < 0) {
+        //     itm.CurrTest = itm.Test1.split("/")[0] + "/400"
+        //     itm.CurrLevel = itm.Level1
+        //     itm.Diff =  parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  )
+        // } 
        }
       if (parseInt(itm.Test2.split("/")[0] - itm.Test3.split("/")[0]  ) < 0){
-        if (parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  ) >= 0){
-          itm.CurrTest = itm.Test3.split("/")[0] + "/400"
+        itm.CurrTest = itm.Test3.split("/")[0] + "/400"
             itm.CurrLevel = itm.Level3
             itm.Diff =  parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  )
-        }
-        if (parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  ) < 0){
-            itm.CurrTest = itm.Test1.split("/")[0] + "/400"
-            itm.CurrLevel = itm.Level1
-            itm.Diff =  parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  )
-        }
+        // if (parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  ) >= 0){
+          
+        // }
+        // if (parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  ) < 0){
+        //     itm.CurrTest = itm.Test1.split("/")[0] + "/400"
+        //     itm.CurrLevel = itm.Level1
+        //     itm.Diff =  parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  )
+        // }
 
       }
 
