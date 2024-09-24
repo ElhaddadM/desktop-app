@@ -40,7 +40,7 @@ function TableB() {
   const [TotalActive, setTotalActive] = useState(0);
   const [TotalAll, setTotalAll] = useState(0);
   const [TotalNActive, setTotalNActive] = useState(0);
-  const [Organization, setOrganization] = useState("-");
+  const [Organization, setOrganization] = useState("univercity caddy ayad");
   const [count, setCount] = useState(false);
   const [file,setFile]  = useState('Groups')
   const [details,setDetails]  = useState([])
@@ -369,12 +369,32 @@ const columns = useMemo(
   </div>
 </dialog>
 
-
-        <div className=' flex gap-6 flex-wrap '>
-          <div className='flex-grow-1 basis-96'><CardA title={Organization} num={"Organization"} /></div>
-          <div className='flex-grow-1 basis-96'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
-          <div className='flex-grow-1 basis-96'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
-          <div className='flex-grow-1 basis-96'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
+{/* <div className="flex w-full">
+<div className="card rounded-box grid h-20 flex-grow place-items-center"><CardA title={Organization} num={"Organization"} /></div>
+<div className="card rounded-box grid h-20 flex-grow place-items-center"><CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
+  {/* <div className="divider divider-horizontal">OR</div> */}
+  {/* <div className="card rounded-box grid h-20 flex-grow place-items-center">content</div>
+  <div className="card rounded-box grid h-20 flex-grow place-items-center">content</div>
+ </div>  */}
+ {/* <CardA title={Organization} num={"Organization"} /> */}
+ <div className="badge badge-info gap-2">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="inline-block h-4 w-4 stroke-current">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M6 18L18 6M6 6l12 12"></path>
+  </svg>
+  {Organization}
+</div>
+        <div className=' flex gap-6 flex-wrap mb-2 justify-center'>
+          <div className=''> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
+          <div className=''><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
+          <div className=''><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
           
         </div>
 
@@ -419,7 +439,7 @@ const columns = useMemo(
 
               <div className='ms-32 flex gap-6'>
                  <div className="badge badge-primary   w-28">Date  <DoubleRightOutlined />  :</div>
-                 <div className='badge badge-primary ' > {data[0]?.date} </div>
+                 <div className='badge badge-primary  h-10' > {data[0]?.date} </div>
                  
               </div>
 
