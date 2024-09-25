@@ -39,11 +39,25 @@ function Stats() {
 
   return (
     <div>
-          <div className='flex gap-6 flex-wrap mx-auto'>
-          <div className='flex-grow-1 basis-96 w-auto'><CardA title={Organization} num={"Organization"} /></div>
-          <div className='flex-grow-1 basis-96 w-auto'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
-          <div className='flex-grow-1 basis-96 w-auto'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
-          <div className='flex-grow-1 basis-96 w-auto'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
+       <div className="badge badge-info gap-2">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="inline-block h-4 w-4 stroke-current">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M6 18L18 6M6 6l12 12"></path>
+  </svg>
+  {Organization}
+</div>
+          <div className='flex gap-6 flex-wrap mx-auto mb-2'>
+          {/* <div className='flex-grow-1 basis-96 w-auto'><CardA title={Organization} num={"Organization"} /></div> */}
+          <div className='flex-grow-1'> <CardA title={"Active"} num={TotalActive} pourcentage={ ((TotalActive/TotalAll)*100).toFixed()  + "%" } /></div>
+          <div className='flex-grow-1'><CardA title={"Not Active"} num={TotalNActive} pourcentage={((TotalNActive/TotalAll)*100).toFixed() + "%"} /></div>
+          <div className='flex-grow-1'><CardA title={"Total"} num={TotalAll} pourcentage={((TotalAll/TotalAll)*100).toFixed() + "%"} /> </div>
           
         </div>
         <div className='grid grid-cols-2 gap-4 my-3'>
