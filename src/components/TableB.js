@@ -309,7 +309,7 @@ const columns = useMemo(
     <div className="w-full">
 
 <dialog id="my_modal_4" className="modal">
-  <div className="modal-box w-11/12 max-w-5xl">
+  <div className="modal-box w-11/12 max-w-5xl text-slate-200">
     <h3 className="font-bold text-lg text-blue-500">Detail {details[0]?.Group}!</h3>
   
     <div className="overflow-x-auto h-96 overflow-y-scroll font-bold text-xl " >

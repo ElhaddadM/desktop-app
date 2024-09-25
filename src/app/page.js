@@ -1,13 +1,10 @@
 import React from 'react'
-import Template from './Template'
-import Link from 'next/link'
+// import Template from './Template'
+import Login from '@/components/Login'
 function Home() {
   return (
     <main>
-     LoginPage 
-     <div>
-       <Link href="/home" className='text-xl font-bold'>Home</Link>
-     </div>
+      <Login />
     </main>
   )
 }

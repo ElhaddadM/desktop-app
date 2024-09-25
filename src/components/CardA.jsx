@@ -3,7 +3,7 @@ import React from 'react'
 function CardA({title="-",num="-",pourcentage="-"}) {
   return (
      
-                            <div className="flex flex-wrap mt-4 shadow-2xl  mx-auto w-[23rem]">
+                            <div className="flex flex-wrap mt-4 shadow-2xl  mx-auto    ">
                                 <div className=" px-6 ">
                                     <div className="flex items-center px-5 py-6 bg-white rounded-md ">
                                         <div className="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
