@@ -253,7 +253,7 @@ const AddDataGrow =   (file, table, data1) => {
         //     itm.Diff =  parseInt(itm.Test2.split("/")[0] - itm.Test1.split("/")[0]  )
         // } 
        }
-      if (parseInt(itm.Test2.split("/")[0] - itm.Test3? .split("/")[0]  ) < 0){
+      if (parseInt(itm.Test2.split("/")[0] - itm.Test3?.split("/")[0]  ) < 0){
         itm.CurrTest = itm.Test3.split("/")[0] + "/400"
             itm.CurrLevel = itm.Level3
             itm.Diff =  parseInt(itm.Test3.split("/")[0] - itm.Test1.split("/")[0]  )
