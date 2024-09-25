@@ -12,6 +12,9 @@ useEffect(()=>{
     className="hero min-h-screen"
     style={{
     //   backgroundImage: `url(${backgroundImage.src ? backgroundImage.src : backgroundImage})`,
+    backgroundImage: "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxE4Lm7IzbSLh6vBJe0q0RAT0BizWFBcMQCw&s)",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
     }}>
     <div className="hero-overlay bg-opacity-60"></div>
     <div className="hero-content text-neutral-content text-center">
